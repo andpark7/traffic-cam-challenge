@@ -2,8 +2,16 @@ body, input {
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 16px;
     font-weight: 300;
+    background-color: #faebd7;
 }
 
+h1 {
+    margin-bottom: 0px;
+}
+
+#instruct {
+    margin-top: 5px;
+}
 #map {
     height: 800px;
     margin: 0;

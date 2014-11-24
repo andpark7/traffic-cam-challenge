@@ -44,9 +44,13 @@ $(document).ready(function() {
                     infoWindow.open(map, this);
                 });
 
+                google.maps.event.addListener(map, 'click', function() {
+                    infoWindow.close();
+                });
+                
                 $('#search').bind('search keyup', function() {
-                    var searchElem = $(this).text().toLowerCase();
-                    if (marker.text().toLowerCase().indexOf(searchElem) == -1) {
+                    var searchElem = this.value.toLowerCase();
+                    if (station.cameralabel.toLowerCase().indexOf(searchElem) == -1) {
                         marker.setMap(null);
                     } else {
                         marker.setMap(map);
