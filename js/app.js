@@ -3,30 +3,27 @@
 
 "use strict";
 
-//put your code here to create the map, fetch the list of traffic cameras
-//and add them as markers on the map
-//when a user clicks on a marker, you should pan the map so that the marker
-//is at the center, and open an InfoWindow that displays the latest camera
-//image
-//you should also write the code to filter the set of markers when the user
-//types a search phrase into the search box
-
 $(document).ready(function() {
     var mapElem = document.getElementById('map');
+    //set the focus of the map
     var center = {
         lat: 47.6,
         lng: -122.3
     };
 
+    //create new map element
     var map = new google.maps.Map(mapElem, {
         center: center,
         zoom: 12
     });
 
+    //make a new infowindow
     var infoWindow = new google.maps.InfoWindow();
 
+    //get data from seattle gov
     $.getJSON('http://data.seattle.gov/resource/65fc-btcc.json')
         .done(function(data) {
+            //make a marker for each data point
             data.forEach(function (station) {
                 var marker = new google.maps.Marker({
                     position: {
@@ -36,6 +33,7 @@ $(document).ready(function() {
                     map: map
                 });
 
+                //make a infowindow pop up if a marker is clicked on
                 google.maps.event.addListener(marker, 'click', function() {
                     var html = '<p>' + station.cameralabel + '</p>';
                     html += '<img src=' + station.imageurl.url + '>';
@@ -44,10 +42,12 @@ $(document).ready(function() {
                     infoWindow.open(map, this);
                 });
 
+                //closes the infowindow if anywhere on the map is clicked
                 google.maps.event.addListener(map, 'click', function() {
                     infoWindow.close();
                 });
-                
+
+                //filters markers depending on user input
                 $('#search').bind('search keyup', function() {
                     var searchElem = this.value.toLowerCase();
                     if (station.cameralabel.toLowerCase().indexOf(searchElem) == -1) {
@@ -55,10 +55,10 @@ $(document).ready(function() {
                     } else {
                         marker.setMap(map);
                     }
-                });
-
-            });
-        })
+                });//bind
+            });//foreach
+        })//done
+        //fail case
         .fail(function(error) {
             alert("There is an error!");
         });
